@@ -5,8 +5,8 @@
 #include "kineticheap.h"
 
 int main(void) {
-    int sizes[]   = {10000, 30000, 100000, 300000};
-    int num_sizes = 4;
+    int sizes[]   = {10000, 30000, 100000, 300000, 1000000, 3000000, 10000000};
+    int num_sizes = 7;
 
     FILE *fp = fopen("results/scaling.csv", "w");
     if (!fp) { fprintf(stderr, "Cannot open results/scaling.csv\n"); return 1; }
