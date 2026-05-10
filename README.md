@@ -141,8 +141,10 @@ void kh_destroy(KineticHeap *kh);
 ## Benchmark Results
 
 > Results collected on: Windows 10, GCC 6.3.0, -O3, Intel Core i5, 8 GB RAM.
-> 
+>
 > *(Full results on Linux server will be added upon paper acceptance.)*
+
+### KineticHeap++ Scaling
 
 | n | Time (sec) | Certificate Count |
 |---|---|---|
@@ -151,9 +153,25 @@ void kh_destroy(KineticHeap *kh);
 | 100,000 | 0.2980 | 112,491 |
 | 300,000 | 0.7950 | 339,665 |
 
-*Table will be updated with real benchmark output.*
+### Comparison Against Baselines
 
----
+| n | Naive PQ (B1) | Indexed Heap (B4) | STL Heap (B8) | KineticHeap++ | Speedup |
+|---|---|---|---|---|---|
+| 10,000 | — | 1.032 sec | 1.144 sec | **0.017 sec** | **~61–67×** |
+| 30,000 | — | 9.614 sec | 9.509 sec | **0.098 sec** | **~97–98×** |
+| 100,000 | — | 117.305 sec | 121.729 sec | **0.298 sec** | **~394–408×** |
+
+### Naive PQ Scaling (O(n²) behaviour)
+
+| n | Naive PQ (B1) | KineticHeap++ |
+|---|---|---|
+| 500 | 0.718 sec | < 0.001 sec |
+| 1,000 | 3.145 sec | < 0.001 sec |
+| 2,000 | 12.029 sec | < 0.001 sec |
+| 3,000 | 30.077 sec | < 0.001 sec |
+
+> KineticHeap++ is **60–400× faster** than standard heap baselines
+> on random linear-motion workloads.
 
 ## Reproducibility
 
