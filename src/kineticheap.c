@@ -312,26 +312,36 @@ void kh_handle_event(KineticHeap *kh) {
     if (!kh->fheap->min) return;
     FHNode *ev = fh_extract_min(kh->fheap);
     if (!ev) return;
+
     double t_ev = ev->key;
     int    i    = ev->heap_i;
     int    j    = ev->heap_j;
     free(ev);
+
+    /* validate indices */
+    if (i < 1 || i > kh->size) return;
+    if (j < 1 || j > kh->size) return;
+    if (j != i * 2 && j != i * 2 + 1) return; /* stale event */
+
     kh->time = t_ev;
-    kh_apply_lazy(kh, i);
-    kh_apply_lazy(kh, j);
-    if (j > 1) kh_revoke_cert(kh, j / 2, j);
-    kh_revoke_cert(kh, i, j);
-    int l = 2 * j, r = 2 * j + 1;
-    if (l <= kh->size) kh_revoke_cert(kh, j, l);
-    if (r <= kh->size) kh_revoke_cert(kh, j, r);
+
+    /* revoke affected certificates */
+    kh->nodes[j].cert = NULL; /* already extracted */
+    if (2*j   <= kh->size && kh->nodes[2*j].cert)
+        kh_revoke_cert(kh, j, 2*j);
+    if (2*j+1 <= kh->size && kh->nodes[2*j+1].cert)
+        kh_revoke_cert(kh, j, 2*j+1);
+
+    /* swap i and j */
     kh_swap(kh, i, j);
-    if (i > 1) kh_issue_cert(kh, i / 2, i);
+
+    /* reissue certificates */
     kh_issue_cert(kh, i, j);
-    l = 2 * i; r = 2 * i + 1;
-    if (l <= kh->size) kh_issue_cert(kh, i, l);
-    if (r <= kh->size) kh_issue_cert(kh, i, r);
-    if (2 * j     <= kh->size) kh_issue_cert(kh, j, 2 * j);
-    if (2 * j + 1 <= kh->size) kh_issue_cert(kh, j, 2 * j + 1);
+    if (2*i   <= kh->size) kh_issue_cert(kh, i, 2*i);
+    if (2*i+1 <= kh->size) kh_issue_cert(kh, i, 2*i+1);
+    if (2*j   <= kh->size) kh_issue_cert(kh, j, 2*j);
+    if (2*j+1 <= kh->size) kh_issue_cert(kh, j, 2*j+1);
+    if (i > 1) kh_issue_cert(kh, i/2, i);
 }
 
 double kh_min_key(KineticHeap *kh) {
