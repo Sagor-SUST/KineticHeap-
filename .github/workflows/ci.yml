@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gcc make
+
+    - name: Build all targets
+      run: |
+        mkdir -p build results
+        gcc -O3 -Wall -std=c11 -Iinclude \
+            src/kineticheap.c src/main_bench.c \
+            -o build/kineticheap -lm
+        gcc -O3 -Wall -std=c11 -Iinclude \
+            src/kineticheap.c src/bench_scale.c \
+            -o build/bench_scale -lm
+        gcc -O3 -Wall -std=c11 \
+            src/baselines/naive_pq.c \
+            -o build/baseline_naive -lm
+        gcc -O3 -Wall -std=c11 \
+            src/baselines/indexed_heap.c \
+            -o build/baseline_indexed -lm
+        gcc -O3 -Wall -std=c11 \
+            src/baselines/stl_pq.c \
+            -o build/baseline_stl -lm
+
+    - name: Run correctness test
+      run: ./build/kineticheap
+
+    - name: Run scaling benchmark (small)
+      run: ./build/bench_scale
+
+    - name: Upload results
+      uses: actions/upload-artifact@v3
+      with:
+        name: benchmark-results
+        path: results/
