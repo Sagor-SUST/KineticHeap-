@@ -1,4 +1,5 @@
-#include <windows.h>
+#include <time.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -10,10 +11,9 @@
  */
 
 static double get_time(void) {
-    LARGE_INTEGER freq, cnt;
-    QueryPerformanceFrequency(&freq);
-    QueryPerformanceCounter(&cnt);
-    return (double)cnt.QuadPart / (double)freq.QuadPart;
+    struct timespec t;
+    clock_gettime(CLOCK_MONOTONIC, &t);
+    return t.tv_sec + t.tv_nsec / 1e9;
 }
 
 typedef struct {

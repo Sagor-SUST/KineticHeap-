@@ -11,7 +11,7 @@
 #include <stdlib.h>
 
 #ifdef _WIN32
-#include <windows.h>
+
 static double get_time(void) {
     LARGE_INTEGER freq, cnt;
     QueryPerformanceFrequency(&freq);
