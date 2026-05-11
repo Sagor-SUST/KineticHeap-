@@ -5,6 +5,7 @@
  *
  * Usage: ./build/gen_random <n> <output_file>
  * Example: ./build/gen_random 10000 datasets/random_10k.csv
+ * gen_random.c
  */
 
 #include <stdio.h>
@@ -19,6 +20,7 @@ int main(int argc, char *argv[]) {
 
     int   n        = atoi(argv[1]);
     char *filename = argv[2];
+
 
     FILE *fp = fopen(filename, "w");
     if (!fp) { fprintf(stderr, "Cannot open %s\n", filename); return 1; }
