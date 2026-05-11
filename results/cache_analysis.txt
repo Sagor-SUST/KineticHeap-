@@ -1,0 +1,19 @@
+=== CACHE MISS ANALYSIS — WSL2 perf stat ===
+Hardware: Intel Core i5-10210U, WSL2 Kali Linux
+
+KH++ (full benchmark n=10K to 10M):
+  cache-misses:      4,443,503,423
+  cache-references:  8,684,799,398
+  L1-dcache-misses:  4,338,312,718
+  cache-miss-rate:   51.2%
+
+B2 Fibonacci Heap Kinetic (n=10K to 10M):
+  cache-misses:      9,226,787,371
+  cache-references:  17,985,969,879
+  L1-dcache-misses:  8,041,375,594
+  cache-miss-rate:   51.3%
+
+KEY RESULTS:
+  KH++ cache misses:    2.08x fewer than B2
+  KH++ L1 misses:       1.85x fewer than B2
+  Consistent with 8.82x fewer certificate events processed
