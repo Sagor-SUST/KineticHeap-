@@ -1,0 +1,2 @@
+method,n,mean_time,sd_time,ci95_lo,ci95_hi,mean_certs
+KH++,10316,0.038337,0.003348,0.037087,0.039586,42794
