@@ -193,8 +193,7 @@ results/scaling.csv
 |---|---|
 | Md. Mahbobul Hasan Sagor | Dept. of CSE, Shahjalal University of Science & Technology (SUST), Sylhet, Bangladesh |
 | Mominul Islam | Dept. of CSE, SUST |
-| Nasimul Bari Nafim | Dept. of CSE, SUST |
-| Tawseef Zaman Turjo | Dept. of CSE, SUST |
+
 
 ---
 
@@ -206,8 +205,7 @@ If you use this code in your research, please cite:
 @article{sagor2026kineticheap,
   title     = {{KINETICHEAP}++: Engineering a Cache-Efficient Kinetic Priority Queue
                for Dynamic Linear Trajectories},
-  author    = {Sagor, Md. Mahbobul Hasan and Islam, Mominul and
-               Nafim, Nasimul Bari and Turjo, Tawseef Zaman},
+  author    = {Sagor, Md. Mahbobul Hasan and Mominul Islam},
   journal   = {IEEE Transactions on Computers},
   year      = {2026},
   note      = {Under review}
