@@ -16,7 +16,7 @@ priorities evolving as linear functions of time **kᵢ(t) = aᵢ + bᵢt**.
 
 This repository contains the full C11 implementation accompanying the paper:
 
-> Md. Mahbobul Hasan Sagor, Mominul Islam, Nasimul Bari Nafim, and Tawseef Zaman Turjo,
+> Md. Mahbobul Hasan Sagor, Mominul Islam,
 > **"KINETICHEAP++: Engineering a Cache-Efficient Kinetic Priority Queue for Dynamic Linear Trajectories,"**
 > *IEEE Transactions on Computers*, 2026 (under review).
 
