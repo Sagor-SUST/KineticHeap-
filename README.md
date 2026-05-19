@@ -6,6 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Windows%20%7C%20macOS-blue)]()
 [![Language](https://img.shields.io/badge/language-C11-orange)]()
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20114884.svg)](https://doi.org/10.5281/zenodo.20114884)
 
 ---
 
