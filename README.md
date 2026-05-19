@@ -140,7 +140,7 @@ void kh_destroy(KineticHeap *kh);
 
 ## Benchmark Results
 
-> Results collected on: Windows 10, GCC 6.3.0, -O3, Intel Core i5, 8 GB RAM.
+> Results collected on: Windows 11 / WSL2 (Kali Linux), GCC 15.2, -O3, Intel Core i5-10210U, 8 GB RAM.
 >
 > *(Full results on Linux server will be added upon paper acceptance.)*
 
