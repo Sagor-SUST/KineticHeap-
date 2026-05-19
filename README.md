@@ -59,7 +59,7 @@ KineticHeap/
 
 ### Requirements
 
-- GCC 9+ (tested with GCC 12.2.0)
+- GCC 15.2
 - GNU Make
 - `-lm` (math library)
 
