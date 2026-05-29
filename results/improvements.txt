@@ -1,0 +1,22 @@
+=== Statistical Analysis Notes ===
+- Welch t-tests added: welch_kh_b2.csv, welch_kh_b3.csv, welch_kh_b4.csv
+- Cohen d effect sizes computed alongside all CIs
+- B2 completed all 30 trials at n=10^7 (mean=76.29s, sd=9.40s)
+  confirming speedup comparison is against normally-operating baseline
+
+=== Memory Analysis Correction ===
+- Theoretical 9.6GB B2 queue estimate assumes full simultaneous residency
+- In practice Fibonacci heap allocates/frees incrementally
+- Peak RSS stays within 8GB — no swapping observed
+
+=== MAWI Real-World Validation ===
+- Dataset: MAWI samplepoint-F, 202601031400, Jan 3 2026
+- 12,088 flow-level trajectories extracted from 144M packets
+- LPE suppression: 90.7%, Speedup: 15.76x, Csched reduction: 12.99x
+
+=== Planned Paper Updates ===
+- Add cache-oblivious lower bound citation (Brodal-Fagerberg SODA 2003)
+- Clarify linear trajectory scope in abstract
+- Add trajectory update API to Section IV
+- Add hard real-time deferral limitation to Section XVIII
+- Downgrade Proposition VII.6 to Empirically-Supported Conjecture
