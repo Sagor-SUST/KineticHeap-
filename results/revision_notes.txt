@@ -56,3 +56,26 @@ Results (DEFER_WINDOW=30.0, 30 trials):
   Csched reduction: 12.99x fewer
 Citation: MAWI Working Group, "MAWI Traffic Archive, samplepoint-F,"
 https://mawi.wide.ad.jp/mawi/, January 2026, file: 202601031400.
+
+=== R3: B2 Memory Behavior Clarification ===
+FINDING: B2 was NOT OOM-killed at n=10^7.
+Evidence: b2_stats.csv shows 30-trial mean=76.29s at n=10^7 with
+sd=9.40 — consistent variance, no OOM termination.
+
+The §XVI statement "B2's low RSS reflects only what it could allocate
+before hitting memory limits" was INCORRECT and must be revised.
+
+Corrected text for §XVI:
+"B2 completed all 30 trials at n=10^7 (mean=76.29s, sd=9.40s),
+indicating no OOM termination occurred on the 8GB test machine.
+The theoretical event-queue estimate of ~9.6GB at n=10^7 assumes
+all certificates are simultaneously resident; in practice, B2's
+Fibonacci heap allocates and frees nodes incrementally, keeping
+peak RSS within available RAM. The speedup comparison at n=10^7
+(KH++ 54.57s vs B2 76.29s, 1.40x) is therefore valid — B2 was
+operating normally, not memory-constrained."
+
+IMPLICATION: This actually STRENGTHENS our wall-clock claims —
+the speedup at n=10^7 is against a normally-operating baseline,
+not a memory-thrashing one. Remove the caveat in §XVI about B2
+RSS reflecting memory limits.
