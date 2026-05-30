@@ -88,7 +88,7 @@ double kh_eval_key(KineticHeap *kh, int idx);
 double kh_cert_time(KineticHeap *kh, int parent, int child);
 void   kh_issue_cert(KineticHeap *kh, int parent, int child);
 void   kh_revoke_cert(KineticHeap *kh, int parent, int child);
-void   kh_sift_up(KineticHeap *kh, int idx);
+int    kh_sift_up(KineticHeap *kh, int idx);
 void   kh_sift_down(KineticHeap *kh, int idx);
 void   kh_apply_lazy(KineticHeap *kh, int idx);
 

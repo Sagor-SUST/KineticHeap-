@@ -193,11 +193,13 @@ void kh_destroy(KineticHeap *kh) {
 void kh_apply_lazy(KineticHeap *kh, int idx) {
     HeapNode *n    = &kh->nodes[idx];
     n->lazy_offset = n->slope * (kh->time - n->last_sync);
+    n->last_sync   = kh->time;  /* mark as synced to current time */
 }
 
 double kh_eval_key(KineticHeap *kh, int idx) {
+    kh_apply_lazy(kh, idx);     /* apply lazy offset before reading key */
     HeapNode *n = &kh->nodes[idx];
-    return n->intercept + n->slope * kh->time;
+    return n->intercept + n->lazy_offset;
 }
 
 double kh_cert_time(KineticHeap *kh, int p, int c) {
@@ -236,7 +238,7 @@ static void kh_swap(KineticHeap *kh, int i, int j) {
     kh->nodes[j].pos = j;
 }
 
-void kh_sift_up(KineticHeap *kh, int idx) {
+int kh_sift_up(KineticHeap *kh, int idx) {
     while (idx > 1) {
         int p = idx / 2;
         if (kh_eval_key(kh, p) > kh_eval_key(kh, idx)) {
@@ -248,6 +250,7 @@ void kh_sift_up(KineticHeap *kh, int idx) {
             idx = p;
         } else break;
     }
+    return idx;  /* return final position after sifting */
 }
 
 void kh_sift_down(KineticHeap *kh, int idx) {
@@ -288,8 +291,10 @@ void kh_insert(KineticHeap *kh, double intercept, double slope, int id) {
     n->pos         = idx;
     n->id          = id;
     n->cert        = NULL;
-    kh_sift_up(kh, idx);
-    if (idx > 1) kh_issue_cert(kh, idx / 2, idx);
+    int final_pos = kh_sift_up(kh, idx);
+    /* issue cert only if node did not move (sift_up issues certs on each swap) */
+    if (final_pos == idx && idx > 1)
+        kh_issue_cert(kh, idx / 2, idx);
 }
 
 HeapNode kh_delete_min(KineticHeap *kh) {
