@@ -1,6 +1,6 @@
 # KineticHeap++
 
-> **A Certificate-Efficient Kinetic Priority Queue for Dynamic Linear Trajectories**
+> **Certificate-Efficient Kinetic Priority Queue**
 
 [![Build Status](https://github.com/Sagor-SUST/KineticHeap-/actions/workflows/ci.yml/badge.svg)](https://github.com/Sagor-SUST/KineticHeap-/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
