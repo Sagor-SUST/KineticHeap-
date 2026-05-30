@@ -1,6 +1,6 @@
 # KineticHeap++
 
-> **A Cache-Efficient Kinetic Priority Queue for Dynamic Linear Trajectories**
+> **A Certificate-Efficient Kinetic Priority Queue for Dynamic Linear Trajectories**
 
 [![Build Status](https://github.com/Sagor-SUST/KineticHeap-/actions/workflows/ci.yml/badge.svg)](https://github.com/Sagor-SUST/KineticHeap-/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -18,7 +18,7 @@ priorities evolving as linear functions of time **kᵢ(t) = aᵢ + bᵢt**.
 This repository contains the full C11 implementation accompanying the paper:
 
 > Md. Mahbobul Hasan Sagor, Mominul Islam,
-> **"KINETICHEAP++: Engineering a Cache-Efficient Kinetic Priority Queue for Dynamic Linear Trajectories,"**
+> **"KINETICHEAP++: Engineering a Certificate-Efficient Kinetic Priority Queue for Dynamic Linear Trajectories,"**
 > *IEEE Transactions on Computers*, 2026 (under review).
 
 ### Key Design Features
@@ -139,6 +139,33 @@ void kh_destroy(KineticHeap *kh);
 
 ---
 
+## Implementation Notes
+
+### Code Architecture
+
+`src/kineticheap.c` is the **reference implementation** of KINETICHEAP++. It fully
+implements all three engineering contributions described in the paper — LPE, FHEQ,
+and the interleaved array layout — and is the correct starting point for anyone
+wishing to understand or extend the design.
+
+The benchmark files (`src/bench_*.c`) are **self-contained performance harnesses**.
+Each one contains its own inline implementation of the kinetic heap, optimised for
+the specific workload being measured (e.g. MAWI packet trace, molecular dynamics,
+adversarial inputs). This design was chosen deliberately to:
+
+1. Eliminate linking overhead and enable workload-specific tuning
+2. Allow each benchmark to be compiled and run independently
+3. Match the exact struct layout used to produce the paper's reported numbers
+
+**The paper's empirical results were produced by the benchmark files, not by
+`kineticheap.c` directly.** The algorithms, invariants, and performance
+characteristics are identical between the two; the benchmark implementations
+are faithful translations of the same design. `kineticheap.c` serves as the
+clean, documented, API-stable reference that readers should consult alongside
+the paper's pseudocode (Algorithms 1–4).
+
+---
+
 ## Benchmark Results
 
 > Results collected on: Windows 11 / WSL2 (Kali Linux), GCC 15.2, -O3, Intel Core i5-10210U, 8 GB RAM.
@@ -204,7 +231,7 @@ If you use this code in your research, please cite:
 
 ```bibtex
 @article{sagor2026kineticheap,
-  title     = {{KINETICHEAP}++: Engineering a Cache-Efficient Kinetic Priority Queue
+  title     = {{KINETICHEAP}++: Engineering a Certificate-Efficient Kinetic Priority Queue
                for Dynamic Linear Trajectories},
   author    = {Sagor, Md. Mahbobul Hasan and Mominul Islam},
   journal   = {IEEE Transactions on Computers},
