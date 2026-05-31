@@ -67,14 +67,17 @@ static void fh_consolidate(FibHeap *fh) {
     FHNode **A = (FHNode **)calloc(max_degree, sizeof(FHNode *));
     if (!A) { fprintf(stderr, "fh_consolidate: calloc failed\n"); exit(1); }
 
-    FHNode *roots[4096];
-    int     nroots = 0;
-    FHNode *cur = fh->min;
-    if (cur) {
-        do {
-            roots[nroots++] = cur;
-            cur = cur->right;
-        } while (cur != fh->min && nroots < 4096);
+    /* Count roots dynamically to avoid hardcoded limit */
+    int nroots = 0;
+    if (fh->min) {
+        FHNode *cur = fh->min;
+        do { nroots++; cur = cur->right; } while (cur != fh->min);
+    }
+    FHNode **roots = (FHNode **)malloc(nroots * sizeof(FHNode *));
+    if (nroots > 0 && !roots) { fprintf(stderr, "fh_consolidate: malloc failed\n"); exit(1); }
+    if (fh->min) {
+        FHNode *cur = fh->min;
+        for (int i = 0; i < nroots; i++) { roots[i] = cur; cur = cur->right; }
     }
 
     for (int k = 0; k < nroots; k++) {
@@ -95,6 +98,7 @@ static void fh_consolidate(FibHeap *fh) {
         if (A[d]) fh_link_root(fh, A[d]);
     }
     free(A);
+    free(roots);
 }
 
 FHNode *fh_extract_min(FibHeap *fh) {
@@ -103,11 +107,13 @@ FHNode *fh_extract_min(FibHeap *fh) {
 
     if (z->child) {
         FHNode *child = z->child;
+        int guard = fh->size + 1;  /* defensive loop counter against corrupted sibling pointers */
         do {
             FHNode *next  = child->right;
             child->parent = NULL;
             fh_link_root(fh, child);
             child = next;
+            if (--guard < 0) { fprintf(stderr, "fh_extract_min: sibling list corrupted\n"); exit(1); }
         } while (child != z->child);
     }
 
@@ -191,9 +197,11 @@ void kh_destroy(KineticHeap *kh) {
 }
 
 void kh_apply_lazy(KineticHeap *kh, int idx) {
-    HeapNode *n    = &kh->nodes[idx];
-    n->lazy_offset = n->slope * (kh->time - n->last_sync);
-    n->last_sync   = kh->time;  /* mark as synced to current time */
+    HeapNode *n  = &kh->nodes[idx];
+    double delta = kh->time - n->last_sync;
+    n->intercept  += n->slope * delta;  /* absorb offset into intercept */
+    n->last_sync   = kh->time;
+    n->lazy_offset = 0.0;               /* offset is now zero relative to last_sync */
 }
 
 double kh_eval_key(KineticHeap *kh, int idx) {
